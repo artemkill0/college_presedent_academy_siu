@@ -11,3 +11,5 @@ COPY backend/requirements.txt ./
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
 COPY backend/ ./
+
+EXPOSE 8000
