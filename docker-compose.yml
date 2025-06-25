@@ -57,7 +57,7 @@ services:
       dockerfile: Dockerfile.nginx
     container_name: nginx_proxy
     ports:
-      - "8080:80"
+      - "80:80"
     volumes:
       - ./frontend/build:/usr/share/nginx/html:ro
     depends_on:
