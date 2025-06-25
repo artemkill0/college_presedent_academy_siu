@@ -57,7 +57,11 @@ services:
       dockerfile: Dockerfile.nginx
     container_name: nginx_proxy
     ports:
+<<<<<<< HEAD
       - "192.168.0.116:80:80"
+=======
+      - "5.129.207.82:80:80"
+>>>>>>> c9b05ee1a320efba12c15910da37033d38cdac63
     volumes:
       - frontend_build:/usr/share/nginx/html:ro
     depends_on:
