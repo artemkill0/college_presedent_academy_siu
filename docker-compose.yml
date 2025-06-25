@@ -13,7 +13,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - /var/lib/mysql  # анонимный том
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpass"]
       interval: 5s
@@ -31,8 +31,8 @@ services:
     volumes:
       - ./backend:/app/backend
     working_dir: /app/backend
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     depends_on:
       db:
         condition: service_healthy
@@ -43,27 +43,23 @@ services:
       - DATABASE_PASSWORD=mypass
 
   frontend-build:
-      build:
-        context: .
-        dockerfile: Dockerfile.frontend
-      container_name: react_builder
-      command: ["npm", "run", "build"]
-      volumes:
-        - frontend_build:/app/frontend/build
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: react_builder
+    command: ["npm", "run", "build"]
+    volumes:
+      - ./frontend/build:/app/frontend/build  # локальная папка вместо именованного тома
 
   nginx:
     build:
       context: .
       dockerfile: Dockerfile.nginx
     container_name: nginx_proxy
-    expose:
-    - "8000"
+    ports:
+      - "8080:80"
     volumes:
-      - frontend_build:/usr/share/nginx/html:ro
+      - ./frontend/build:/usr/share/nginx/html:ro
     depends_on:
       - backend
       - frontend-build
-
-volumes:
-  frontend_build:
-  mysql_data:
